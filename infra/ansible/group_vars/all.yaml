@@ -1,0 +1,8 @@
+ansible_python_interpreter: /usr/bin/python3.8
+
+ssi_cloud_ip: 192.168.0.2
+ssi_edge_alpha_ip: 192.168.0.3
+ssi_edge_beta_ip: 192.168.0.4
+
+app_authorities_image: "vdocker2603/ma-ssi-app-authorities:latest"
+app_cloud_agent_image: "vdocker2603/ma-ssi-app-cloud-agent:latest"

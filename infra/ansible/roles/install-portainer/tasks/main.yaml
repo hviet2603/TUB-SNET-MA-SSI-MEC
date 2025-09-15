@@ -1,0 +1,22 @@
+---
+- name: Pull Portainer Docker image
+  docker_image:
+    name: portainer/portainer-ce
+    source: pull
+
+- name: Create Portainer container
+  docker_container:
+    name: portainer
+    image: portainer/portainer-ce
+    state: started
+    restart_policy: always
+    published_ports:
+      - "8080:9000" # Expose the Portainer web UI on port 8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock # To manage Docker from within Portainer
+
+- name: Ensure Portainer is running
+  docker_container:
+    name: portainer
+    state: started
+    restart_policy: always

@@ -1,0 +1,62 @@
+{
+  "authoritiesrepresentation": {
+    "did": "5BcajonJVd8L9dmvgDr1pB",
+    "seed": "authoritiesrepresentation0000000",
+    "verkey": "3HEVSPdXMhDNa8HQGhASHz8FUqKMFNqvrrg9CLqtHFHa"
+  },
+  "cloudagent": {
+    "did": "VDBMUXoTXrt2kVoUCC8Bcp",
+    "seed": "cloudagent0000000000000000000000",
+    "verkey": "GNmq2AQSdDs5xNFyYBGP6F3HjpaGnnUdto2ms7N27y7k"
+  },
+  "carcorp": {
+    "did": "KvsUE6Pwm2R9rs5JUnkCWN",
+    "seed": "carcorp0000000000000000000000000",
+    "verkey": "BKNqjHFB27L6u2utnCvDEkftrhm3TcMmiFDDPLKssaVi"
+  },
+  "dronecorp": {
+    "did": "YRAkTnCVgfez7DvTpWgME1",
+    "seed": "dronecorp00000000000000000000000",
+    "verkey": "J89KtH7m8CAYNcwbxPkZb1u5Md4vJBkvCRZpbrN6SZeF"
+  },
+  "edgeopeartoralpha": {
+    "did": "EeCGf1WF1dD7Sb8cDeEeq7",
+    "seed": "edgeopeartoralpha000000000000000",
+    "verkey": "8SEDHgdMFQRujYspraoKB9eh498epsZKW3yc7EhFrn2o"
+  },
+  "edgeopeartorbeta": {
+    "did": "CpJN2cuPHmzp5GvJv1Jh3y",
+    "seed": "edgeopeartorbeta0000000000000000",
+    "verkey": "7SWfVHPZS3eUBEbgUZ5mffmcxvMXQDTK6VPQouGAY5zA"
+  },
+  "edgealpha": {
+    "did": "LFrSJFNqGcfUZk11LCwbfJ",
+    "seed": "edgealpha00000000000000000000000",
+    "verkey": "BViuTbBy4cbCBtXpn43VA3jA4eDkDoTSdxMLvvYNQWQ2"
+  },
+  "edgebeta": {
+    "did": "W4AapQQq2xsufNJuYf58VQ",
+    "seed": "edgebeta000000000000000000000000",
+    "verkey": "GqUPuNU9vDECRcJWg4H49k4noBk9o7ZDMtyVmxYTB6qq"
+  },
+  "cartwin": {
+    "did": "NFTSr3aVFrWkcXjh6jf3Ac",
+    "seed": "cartwin0000000000000000000000000",
+    "verkey": "CajN2UPW2RCQSkF9RF6ehDa8b131SLJx7qggNdEmDwv8"
+  },
+  "dronetwin": {
+    "did": "4ZRTENo4kDF2mHb2xXct25",
+    "seed": "dronetwin00000000000000000000000",
+    "verkey": "2wWPpSp632nsD8vgabyXkFjBmvwapPgQu391jGQYuDSp"
+  },
+  "car": {
+    "did": "U8KbaDYhfHRRP5AAVnkXtY",
+    "seed": "car00000000000000000000000000000",
+    "verkey": "FnWmTTsJ6oCKo7aZ1e9dX8yjAW4EztoFiby78jFjAnbZ"
+  },
+  "drone": {
+    "did": "GV9zZYxygF5z9AvaDF8vdv",
+    "seed": "drone000000000000000000000000000",
+    "verkey": "9SXTBohLMAsNkjamziq9GAqtKyN4Vcw3LtbiJJWe7aqq"
+  }
+}

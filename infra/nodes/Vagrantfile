@@ -1,0 +1,85 @@
+require 'yaml'
+
+config_path = File.expand_path("../config.yaml", __FILE__)
+config_vars = YAML.load_file(config_path)
+
+Vagrant.configure("2") do |config|
+
+    nodes = {
+        config_vars["cloud_node_name"] => {
+            "ip" => config_vars["cloud_node_ip"],
+            "netmask" => config_vars["cloud_node_netmask"],
+            "cpus" => config_vars["cloud_node_cpus"],
+            "ram" => config_vars["cloud_node_ram"]
+        },
+        config_vars["edge_node_names"][0] => {
+            "ip" => config_vars["edge_node_ips"][0],
+            "netmask" => config_vars["edge_node_netmask"],
+            "cpus" => config_vars["edge_node_cpus"],
+            "ram" => config_vars["edge_node_ram"]
+        },
+        config_vars["edge_node_names"][1] => {
+            "ip" => config_vars["edge_node_ips"][1],
+            "netmask" => config_vars["cloud_node_netmask"],
+            "cpus" => config_vars["edge_node_cpus"],
+            "ram" => config_vars["edge_node_ram"]
+        }
+    }
+
+    add_hosts_commands = nodes.map do |name, cfg|
+        %Q(grep -q "#{cfg["ip"]} #{name}" /etc/hosts || echo "#{cfg["ip"]} #{name}" | sudo tee -a /etc/hosts)
+    end.join(" && ")
+
+    nodes.each do |name, cfg|
+        config.vm.define name do |node|
+            node.vm.box = "ubuntu/focal64"
+            node.vm.hostname = name
+    
+            node.vm.network "public_network", 
+                bridge: config_vars["host_adapter"], 
+                ip: cfg["ip"], 
+                netmask: cfg["netmask"],
+                hostname: true
+  
+            node.vm.provider "virtualbox" do |vb|
+                vb.name = name
+                vb.memory = cfg["ram"] 
+                vb.cpus = cfg["cpus"]        
+            end
+
+            node.vm.provision "file", source: config_vars["host_ssh_pubkey"], destination: "~/.ssh/id_rsa.pub"
+
+            node.vm.provision "shell", inline: <<-SHELL
+            sudo useradd -m -s /bin/bash -G sudo user
+            echo "user:user" | sudo chpasswd
+    
+            echo "user ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/user
+
+            # Enable SSH for the user by copying the SSH keys from the vagrant user
+            sudo mkdir -p /home/user/.ssh
+            sudo cat /home/vagrant/.ssh/id_rsa.pub >> /home/vagrant/.ssh/authorized_keys 
+            sudo cp /home/vagrant/.ssh/authorized_keys /home/user/.ssh/ 
+    
+            # Set the ownership and permissions for the user
+            sudo chown -R user:user /home/user/.ssh
+            sudo chmod 700 /home/user/.ssh
+            sudo chmod 600 /home/user/.ssh/authorized_keys
+    
+            # Lock the root account for better security (optional)
+            #sudo passwd -l root
+            SHELL
+
+            # Configure default nameserver
+            node.vm.provision "shell", inline: <<-SHELL
+            sudo sed -i 's/^#*DNS=/DNS=8.8.8.8/' /etc/systemd/resolved.conf
+            sudo systemctl restart systemd-resolved
+            SHELL
+
+            # Add hosts
+            config.vm.provision "shell", inline: <<-SHELL
+                #{add_hosts_commands}
+            SHELL
+
+        end
+    end
+end

@@ -1,0 +1,60 @@
+services:
+  
+  authorities:
+    image: vdocker2603/ma-ssi-apps:latest
+    command: uvicorn app.app_authorities.main:app --host 0.0.0.0 --port 3002
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+      - "3002:3002"
+    environment:
+      AGENT_HOST: "authorities"
+      AGENT_PORT: 3000
+      AGENT_ADMIN_PORT: 3001
+      AGENT_LABEL: "authorities"
+      AGENT_SEED: "authoritiesrepresentation0000000"
+      AGENT_INDY_DID: "5BcajonJVd8L9dmvgDr1pB"
+      WEB_PORT: 3002
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://authorities:3002/"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+
+  edge_operator_alpha:
+    image: vdocker2603/ma-ssi-apps:latest
+    command: uvicorn app.app_edge-operator.main:app --host 0.0.0.0 --port 3005
+    ports:
+      - "3003:3003"
+      - "3004:3004"
+      - "3005:3005"
+    environment:
+      AGENT_HOST: "edge_operator_alpha"
+      AGENT_PORT: 3003
+      AGENT_ADMIN_PORT: 3004
+      AGENT_LABEL: "edge_operator_alpha"
+      AGENT_SEED: "edgeopeartoralpha000000000000000"
+      AGENT_INDY_DID: "EeCGf1WF1dD7Sb8cDeEeq7"
+      AUTHORITY_WEB_URL: "http://authorities:3002"
+    depends_on:
+      authorities:
+        condition: service_healthy
+
+  edge_operator_beta:
+    image: vdocker2603/ma-ssi-apps:latest
+    command: uvicorn app.app_edge-operator.main:app --host 0.0.0.0 --port 3008
+    ports:
+      - "3006:3006"
+      - "3007:3007"
+      - "3008:3008"
+    environment:
+      AGENT_HOST: "edge_operator_beta"
+      AGENT_PORT: 3006
+      AGENT_ADMIN_PORT: 3007
+      AGENT_LABEL: "edge_operator_beta"
+      AGENT_SEED: "edgeopeartorbeta0000000000000000"
+      AGENT_INDY_DID: "CpJN2cuPHmzp5GvJv1Jh3y"
+      AUTHORITY_WEB_URL: "http://authorities:3002"
+    depends_on:
+      authorities:
+        condition: service_healthy  

@@ -1,0 +1,37 @@
+---
+- name: Install python3 pip
+  apt:
+    name: python3-pip
+    state: present
+
+- name: Install docker package
+  pip:
+    name: docker
+    executable: pip3
+    state: present
+
+# Install python3.12 for development
+- name: Add deadsnakes PPA for Python 3.12
+  ansible.builtin.apt_repository:
+    repo: ppa:deadsnakes/ppa
+    state: present
+    update_cache: yes
+
+- name: Install Python 3.12
+  ansible.builtin.apt:
+    name: python3.12
+    state: present
+    update_cache: yes
+
+- name: Install pip for Python 3.12
+  ansible.builtin.apt:
+    name: 
+      - python3.12-venv 
+      - python3.12-dev
+    state: present
+    update_cache: yes
+
+- name: Ensure pip is installed for python3.12
+  ansible.builtin.command: python3.12 -m ensurepip --upgrade
+  args:
+    creates: /usr/local/lib/python3.12/dist-packages/pip

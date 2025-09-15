@@ -1,0 +1,30 @@
+- hosts: all
+  become: true
+  pre_tasks:
+    - name: Install update
+      tags: always
+      apt:
+        update_cache: yes
+  tasks:
+    - name: Install utilities
+      apt:
+        name:
+          - build-essential
+        state: present
+        update_cache: yes
+
+- hosts: all
+  become_user: user
+  roles:
+    - install-nodejs
+
+- hosts: all
+  become: true
+  roles:
+    - install-python3
+
+- hosts: all
+  become: true
+  roles:
+    - install-docker
+    - install-portainer

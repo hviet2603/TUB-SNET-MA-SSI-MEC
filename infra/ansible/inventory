@@ -1,0 +1,6 @@
+[ssi_cloud]
+user@ssi-cloud
+
+[ssi_edges]
+user@ssi-edge-alpha
+user@ssi-edge-beta

@@ -1,0 +1,21 @@
+- name: Clone and start von-network
+  hosts: ssi_cloud
+  gather_facts: no
+  vars:
+    von_nodes_ips: "{{ ip }},{{ ip }},{{ ip }},{{ ip }}"
+  tasks:
+    - name: Clone von-network repository
+      git:
+        repo: https://github.com/bcgov/von-network
+        dest: ~/von-network
+        version: main
+
+    - name: Build von-network
+      command: ./manage build
+      args:
+        chdir: ~/von-network
+
+    - name: Start von-network with IP list in background
+      shell: ./manage start {{ von_nodes_ips }} &
+      args:
+        chdir: ~/von-network

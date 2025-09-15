@@ -1,0 +1,5 @@
+user: user
+ssi_cloud: "ssi-cloud"
+ssi_edge_alpha: "ssi-edge-alpha"
+ssi_edge_beta: "ssi-edge-beta"
+ip: "192.168.0.2"
