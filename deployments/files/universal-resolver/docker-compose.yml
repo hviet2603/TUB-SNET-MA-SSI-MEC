@@ -1,0 +1,42 @@
+# Modified 
+# from "https://github.com/decentralized-identity/universal-resolver/blob/main/docker-compose.yml" 
+# and "https://github.com/decentralized-identity/universal-resolver-frontend/blob/main/docker-compose.yml"
+
+version: "3.6"
+
+networks:
+  default:
+    name: universal-resolver
+
+services:
+
+  universal-resolver-frontend:
+    image: universalresolver/universal-resolver-frontend:latest
+    container_name: universal-resolver-frontend
+    ports:
+      - "8081:7081"
+    environment:
+      BACKEND_URL: http://ssi-cloud:8082/
+
+  uni-resolver-web:
+    image: universalresolver/uni-resolver-web:latest
+    ports:
+      - "8082:8080"
+    environment:
+      # Override default driver URLs if they are set in .env variables, otherwise
+      # don't define the variables and let uni-resolver-web container use its default
+      # set in application.yml.
+      # See https://docs.docker.com/compose/compose-file/05-services/#environment
+      uniresolver_web_driver_url_did_indy:
+
+
+  driver-did-indy:
+    image: vdocker2603/ma-ssi-custom-indy-resolver-driver:latest
+    #environment:
+      #uniresolver_driver_did_indy_libIndyPath: ${uniresolver_driver_did_indy_libIndyPath}
+      #uniresolver_driver_did_indy_poolConfigs: ${uniresolver_driver_did_indy_poolConfigs}
+      #uniresolver_driver_did_indy_poolVersions: ${uniresolver_driver_did_indy_poolVersions}
+      #uniresolver_driver_did_indy_walletNames: ${uniresolver_driver_did_indy_walletNames}
+      #uniresolver_driver_did_indy_submitterDidSeeds: ${uniresolver_driver_did_indy_submitterDidSeeds}
+    ports:
+      - "8083:8080"

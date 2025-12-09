@@ -1,0 +1,37 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "@protected": true,
+
+    "name": "http://schema.org/name",
+    "description": "http://schema.org/description",
+    "identifier": "http://schema.org/identifier",
+    "image": {"@id": "http://schema.org/image", "@type": "@id"},
+
+    "Edge": {
+      "@id": "ENDPOINT_BASE_URL/vc/vc_context#Edge",
+      "@context": {
+        "name": "http://schema.org/name"
+      }
+    },
+
+    "CarTwin": {
+      "@id": "ENDPOINT_BASE_URL/vc/vc_context#CarTwin",
+      "@context": {
+        "name": "http://schema.org/name",
+        "car_twin_id": "https://example.com/terms#car_twin_id",
+        "car_id": "https://example.com/terms#car_id"
+      }
+    },
+
+    "DroneTwin": {
+      "@id": "ENDPOINT_BASE_URL/vc/vc_context#DroneTwin",
+      "@context": {
+        "name": "http://schema.org/name",
+        "drone_twin_id": "https://example.com/terms#drone_twin_id",
+        "drone_id": "https://example.com/terms#drone_id"
+      }
+    }
+
+  }
+}

@@ -1,0 +1,12 @@
+[ssi_cloud]
+ssi-cloud ansible_user=user
+
+[ssi_edges]
+ssi-edge-alpha ansible_user=user
+ssi-edge-beta ansible_user=user
+
+[ssi_edge_alpha]
+ssi-edge-alpha ansible_user=user
+
+[ssi_edge_beta]
+ssi-edge-beta ansible_user=user

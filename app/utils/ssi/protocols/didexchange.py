@@ -11,7 +11,8 @@ import asyncio
 
 async def didexchange_inviter_create_invitation(
     inviter: Controller,
-    public_did: str
+    public_did: str,
+    multi_use: bool = False,
 ) -> InvitationMessage:
     invite_record = await inviter.post(
         "/out-of-band/create-invitation",
@@ -21,7 +22,7 @@ async def didexchange_inviter_create_invitation(
         },
         params=params(
             auto_accept=False,
-            multi_use=None,
+            multi_use=multi_use,
         ),
         response=InvitationRecord,
     )
@@ -103,3 +104,5 @@ async def didexchange_invitee_handle_response(
     
     return conn
 
+async def didexchange_clear_connection(agent: Controller, connection_id: str):
+    await agent.delete(f"/connections/{connection_id}")

@@ -1,0 +1,35 @@
+- name: Clean setup von-network with predefined DIDs
+  hosts: ssi_cloud
+  gather_facts: no
+  vars:
+    von_nodes_ips: "{{ ip }},{{ ip }},{{ ip }},{{ ip }}"
+  tasks:
+
+    - name: Clean von-network
+      command: ./manage down
+      args:
+        chdir: ~/von-network
+      failed_when: false
+
+    - name: Start von-network with IP list in background
+      shell: ./manage start {{ von_nodes_ips }} &
+      args:
+        chdir: ~/von-network
+    
+    - name: Wait and register DIDs
+      block:
+        
+        - name: Install httpx as required by the script
+          pip:
+            name: httpx
+            state: present
+
+        - name: Wait for von-network node API ...
+          wait_for:
+            host: "{{ inventory_hostname }}"
+            port: 9000
+            delay: 2      # seconds before first check
+            timeout: 20    # max time
+ 
+        - name: Register DIDs
+          script: files/00_register-actors.py

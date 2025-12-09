@@ -1,0 +1,29 @@
+# Authorities
+
+uvicorn app.app_authorities.main:app --host 0.0.0.0 --port 3002
+
+# Edges
+
+## alpha
+export AGENT_PORT=4000 AGENT_ADMIN_PORT=4001 \
+    AGENT_LABEL=edge_alpha  \
+    AGENT_SEED="edgealpha00000000000000000000000" \
+    AGENT_INDY_NYM=LFrSJFNqGcfUZk11LCwbfJ && \
+    uvicorn app.app_edge.main:app --host 0.0.0.0 --port 4002
+
+## beta
+export AGENT_PORT=4003 AGENT_ADMIN_PORT=4004 \
+    AGENT_LABEL=edge_beta \
+    AGENT_SEED=edgebeta000000000000000000000000 \
+    AGENT_INDY_NYM=W4AapQQq2xsufNJuYf58VQ  && \
+    uvicorn app.app_edge.main:app --host 0.0.0.0 --port 4005
+
+# Twins
+
+## car twin 
+export AGENT_PORT=5000 AGENT_ADMIN_PORT=5001 \
+    EDGE_NAME="edge_alpha" MIGRATION="false" \
+    AGENT_LABEL=digital_twin_car \
+    AGENT_SEED="cartwin0000000000000000000000000" \
+    AGENT_INDY_NYM=NFTSr3aVFrWkcXjh6jf3Ac && \
+    uvicorn app.app_digital_twin_car.main:app --host 0.0.0.0 --port 5002

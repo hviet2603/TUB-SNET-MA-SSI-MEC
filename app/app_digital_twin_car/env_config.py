@@ -4,16 +4,27 @@ from dataclasses import asdict
 from app.utils.models.ssi.agent import AgentConfig
 from ..global_config import DID_PREFIX
 
-WEB_PORT = int(os.getenv("WEB_PORT", 3002))
+AUTHORITY_WEB_URL = os.getenv("AUTHORITY_WEB_URL", "http://localhost:3002")
+EDGE_ALPHA_WEB_URL = os.getenv("EDGE_ALPHA_WEB_URL", "http://localhost:4002")
+EDGE_BETA_WEB_URL = os.getenv("EDGE_BETA_WEB_URL", "http://localhost:4005")
+EDGE_NAME = os.getenv("EDGE_NAME", "edge_alpha")
 
 def get_agent_config() -> AgentConfig:
+    
+    tmp_seed = os.getenv("AGENT_SEED", "cartwin0000000000000000000000000")
+    
+    if EDGE_NAME == "edge_alpha":
+        tmp_seed = tmp_seed[:-1] + "0"
+    else:
+        tmp_seed = tmp_seed[:-1] + "1"
+
     return AgentConfig(
         host =  os.getenv("AGENT_HOST", "localhost"),
-        agent_port = int(os.getenv("AGENT_PORT", 3000)),
-        agent_admin_port = int(os.getenv("AGENT_ADMIN_PORT", 3001)),
-        name = os.getenv("AGENT_LABEL", "authorities"), 
-        seed = os.getenv("AGENT_SEED", "authoritiesrepresentation0000000"),
-        did = f"{DID_PREFIX}{os.getenv("AGENT_INDY_NYM", "5BcajonJVd8L9dmvgDr1pB")}",   
+        agent_port = int(os.getenv("AGENT_PORT", 5000)),
+        agent_admin_port = int(os.getenv("AGENT_ADMIN_PORT", 5001)),
+        name = os.getenv("AGENT_LABEL", "car_twin"), 
+        seed = tmp_seed,
+        did = f"{DID_PREFIX}{os.getenv("AGENT_INDY_NYM", "NFTSr3aVFrWkcXjh6jf3Ac")}",   
     )
 
 def update_agent_config(config: AgentConfig):

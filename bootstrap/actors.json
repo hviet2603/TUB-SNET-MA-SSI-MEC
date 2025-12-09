@@ -19,15 +19,15 @@
     "seed": "dronecorp00000000000000000000000",
     "verkey": "J89KtH7m8CAYNcwbxPkZb1u5Md4vJBkvCRZpbrN6SZeF"
   },
-  "edgeopeartoralpha": {
-    "did": "EeCGf1WF1dD7Sb8cDeEeq7",
-    "seed": "edgeopeartoralpha000000000000000",
-    "verkey": "8SEDHgdMFQRujYspraoKB9eh498epsZKW3yc7EhFrn2o"
+  "edgeoperatoralpha": {
+    "did": "JS6kiDpRiTFJfqzZyStFFb",
+    "seed": "edgeoperatoralpha000000000000000",
+    "verkey": "AW5qfPSmwSsVyYQGYjWAg6zvmRdMKwYmA3prRP2vkBdQ"
   },
-  "edgeopeartorbeta": {
-    "did": "CpJN2cuPHmzp5GvJv1Jh3y",
-    "seed": "edgeopeartorbeta0000000000000000",
-    "verkey": "7SWfVHPZS3eUBEbgUZ5mffmcxvMXQDTK6VPQouGAY5zA"
+  "edgeoperatorbeta": {
+    "did": "EPLmJVYPzEy5oP3nBZ78pc",
+    "seed": "edgeoperatorbeta0000000000000000",
+    "verkey": "8J8fP8MDruoxWHou6rhwrprmBuqBYCk5s76XoWhSxsbQ"
   },
   "edgealpha": {
     "did": "LFrSJFNqGcfUZk11LCwbfJ",

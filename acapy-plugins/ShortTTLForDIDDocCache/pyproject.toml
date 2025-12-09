@@ -1,0 +1,10 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "acapy_short_ttl_for_diddoc_cache"
+version = "0.1.0"
+description = "Mimic the default InMem Cache, but only allow maximal TTL of 3s for DIDDoc entries"
+authors = [{name = "Viet Hoang"}]
+dependencies = []

@@ -1,0 +1,27 @@
+- name: Deploy DIF Universal Resolver that work with local VON Network
+  hosts: ssi_cloud
+  collections:
+    - community.docker
+
+  vars:
+    remote_dir: /home/user/universal-resolver/
+
+  tasks:
+
+  - name: Ensure remote folder exists
+    file:
+      path: "{{ remote_dir }}"
+      state: directory
+      mode: '0755'
+      recurse: yes   # creates parent directories if needed
+
+  - name: Copy compose project to remote host
+    copy:
+      src: files/universal-resolver/docker-compose.yml
+      dest: /home/user/universal-resolver/
+      mode: '0555'
+  
+  - name: Start Universal Resolver
+    docker_compose_v2:
+      project_src: /home/user/universal-resolver
+      state: present

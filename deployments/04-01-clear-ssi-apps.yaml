@@ -1,0 +1,40 @@
+- name: Stop and remove SSI containers
+  hosts: all
+  gather_facts: no
+  collections:
+    - community.docker
+
+  vars:
+    container_list:
+      - "{{ authorities_app_name }}"
+      - "{{ edge_alpha_app_name }}"
+      - "{{ edge_beta_app_name }}"
+      - "{{ car_twin_app_name }}"
+      - "{{ drone_twin_app_name }}"
+      - "{{ car_app_name }}"
+      - "{{ drone_app_name }}"
+
+  tasks:
+
+    - name: Stop containers if they exist
+      docker_container:
+        name: "{{ item }}"
+        state: stopped
+      loop: "{{ container_list }}"
+      ignore_errors: yes  # skip if container doesn't exist
+      failed_when: false
+
+    - name: Remove containers if they exist
+      docker_container:
+        name: "{{ item }}"
+        state: absent
+      loop: "{{ container_list }}"
+      ignore_errors: yes
+      failed_when: false
+    
+    - name: Prune unused images
+      docker_prune:
+        images: true
+        images_filters:
+          dangling: false
+

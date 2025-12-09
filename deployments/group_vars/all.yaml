@@ -1,0 +1,73 @@
+ansible_python_interpreter: /usr/bin/python3.8
+
+ssi_cloud_ip: 192.168.0.2
+ssi_edge_alpha_ip: 192.168.0.3
+ssi_edge_beta_ip: 192.168.0.4
+
+base_app_image: "vdocker2603/ma-ssi-apps:latest"
+
+# App names
+
+authorities_app_name: "ma-ssi-authorities"
+edge_alpha_app_name: "ma-ssi-edge-alpha"
+edge_beta_app_name: "ma-ssi-edge-beta"
+car_twin_app_name: "ma-ssi-car-twin"
+drone_twin_app_name: "ma-ssi-drone-twin"
+car_app_name: "ma-ssi-car"
+drone_app_name: "ma-ssi-drone"
+
+# Labels
+
+authorities_label: "authorities"
+edge_alpha_label: "edge_alpha"
+edge_beta_label: "edge_beta"
+car_twin_label: "car_twin"
+drone_twin_label: "drone_twin"
+car_label: "car"
+drone_label: "drone"
+
+# NYMs
+
+authorities_nym: "5BcajonJVd8L9dmvgDr1pB"
+edge_alpha_nym: "LFrSJFNqGcfUZk11LCwbfJ"
+edge_beta_nym: "W4AapQQq2xsufNJuYf58VQ"
+car_twin_nym: "NFTSr3aVFrWkcXjh6jf3Ac"
+drone_twin_nym: "4ZRTENo4kDF2mHb2xXct25"
+car_nym: "U8KbaDYhfHRRP5AAVnkXtY"
+drone_nym: "GV9zZYxygF5z9AvaDF8vdv"
+
+# Seeds
+
+authorities_seed: "authoritiesrepresentation0000000"
+edge_alpha_seed: "edgealpha00000000000000000000000"
+edge_beta_seed: "edgebeta000000000000000000000000"
+car_twin_seed: "cartwin0000000000000000000000000"
+drone_twin_seed: "dronetwin00000000000000000000000"
+car_seed: "car00000000000000000000000000000"
+drone_seed: "drone000000000000000000000000000"
+
+# Ports
+
+authorities_agent_port: "3000"
+edge_alpha_agent_port: "4000"
+edge_beta_agent_port: "4003"
+car_twin_agent_port: "5000"
+drone_twin_agent_port: "5003"
+car_agent_port: "6000"
+drone_agent_port: "6003"
+
+authorities_admin_port: "3001"
+edge_alpha_admin_port: "4001"
+edge_beta_admin_port: "4004"
+car_twin_admin_port: "5001"
+drone_twin_admin_port: "5004"
+car_admin_port: "6001"
+drone_admin_port: "6004"
+
+authorities_web_port: "3002"
+edge_alpha_web_port: "4002"
+edge_beta_web_port: "4005"
+car_twin_web_port: "5002"
+drone_twin_web_port: "5005"
+car_web_port: "6002"
+drone_web_port: "6005"

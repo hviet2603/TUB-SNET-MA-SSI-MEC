@@ -1,3 +1,5 @@
+#!/usr/bin/env python3.12
+
 import httpx
 import json
 from pathlib import Path

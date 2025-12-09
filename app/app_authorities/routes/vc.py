@@ -1,60 +1,48 @@
-from fastapi import APIRouter
-from acapy_controller import Controller
+from fastapi import APIRouter, Depends, Request
 from fastapi import HTTPException
 
+from app.utils.ssi.protocols.didexchange import didexchange_clear_connection
+from ..dependencies.dependencies import get_request_with_DIDExchange_context
 from datetime import date
 
-from app.utils.models.web.vc import VCIssuanceInitRequestModel
-from app.utils.ssi.protocols.didexchange import (
-    didexchange_invitee_handle_response,
-    didexchange_invitee_accept_invitation,
-)
+from app.utils.models.web.base import SSIRequestWithContext
 
 from app.utils.ssi.protocols.jsonld_issue_credential import (
     jsonld_issue_credential_issuer_send_offer,
     jsonld_issue_credential_issuer_handle_request,
 )
 
-from acapy_controller.protocols import InvitationMessage
-
-from ..env_config import get_agent_config
-from app.utils.agent import create_agent_admin_url
-from .data.credentials import credentials
+from ..utils.credentials import credentials
+from ..utils.vc_context import create_custom_vc_context_from_template
 
 from fastapi.responses import JSONResponse
-from pathlib import Path
 import json
 
 from ..env_config import WEB_PORT
 
 router = APIRouter(prefix="/vc", tags=["verifiable_credentials"])
 
-@router.get("/vc_context")
-async def get_json_ld_context():
-    file_path = Path(__file__).parent / "data" / "context.jsonld" 
 
-    with open(file_path, "r", encoding="utf-8") as f:
-        data = json.load(f)
-    
-    return JSONResponse(
-        content=data,
-        media_type="application/ld+json"
-    )
+@router.get("/vc_context")
+async def get_json_ld_context(request: Request):
+    host = request.headers.get("host")
+
+    content = create_custom_vc_context_from_template(f"http://{host}")
+
+    return JSONResponse(content=json.loads(content), media_type="application/ld+json")
+
 
 @router.post("/issue")
-async def request_vc_issuance(init_request_info: VCIssuanceInitRequestModel):
+async def request_vc_issuance(
+    req_wrapper: SSIRequestWithContext = Depends(get_request_with_DIDExchange_context),
+):
+    agent = req_wrapper.agent
+    conn = req_wrapper.did_exchange.conn
+
     try:
-        issuer_agent_config = get_agent_config()
-        issuer_admin_url = create_agent_admin_url(issuer_agent_config)
 
-        invite = InvitationMessage(**init_request_info.invite)
-
-        issuer = Controller(issuer_admin_url)
-        await issuer.setup()
-
-        # Handle DID exchanges
-        conn = await didexchange_invitee_accept_invitation(issuer, invite)
-        conn = await didexchange_invitee_handle_response(issuer, conn.connection_id)
+        issuer = req_wrapper.agent
+        issuer_agent_config = req_wrapper.agent_config
 
         # Issue credential
         requester_did = conn.their_public_did
@@ -64,7 +52,7 @@ async def request_vc_issuance(init_request_info: VCIssuanceInitRequestModel):
         credential = {
             "@context": [
                 "https://www.w3.org/2018/credentials/v1",
-                f"http://{issuer_agent_config.host}:{WEB_PORT}/vc/vc_context"
+                f"http://{issuer_agent_config.host}:{WEB_PORT}/vc/vc_context",
             ],
             "type": ["VerifiableCredential"] + credential_info["type"],
             "issuer": issuer_agent_config.did,
@@ -94,3 +82,7 @@ async def request_vc_issuance(init_request_info: VCIssuanceInitRequestModel):
         print(e)
 
         raise HTTPException(status_code=500, detail=str(e))
+    
+    finally:
+        # Clear the connection
+        await didexchange_clear_connection(agent, conn.connection_id)
