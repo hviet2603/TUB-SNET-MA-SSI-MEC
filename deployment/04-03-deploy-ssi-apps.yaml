@@ -30,6 +30,7 @@
           "ssi-cloud": "{{ ssi_cloud_ip }}"
           "ssi-edge-alpha": "{{ ssi_edge_alpha_ip }}"
           "ssi-edge-beta": "{{ ssi_edge_beta_ip }}"
+          "ssi-ground": "{{ ssi_ground_ip }}"
 
 ### Edge Admins ###
 
@@ -56,6 +57,7 @@
           AUTHORITY_WEB_URL: "http://ssi-cloud:3002"
           EDGE_ALPHA_WEB_URL: "http://ssi-edge-alpha:4002"
           EDGE_BETA_WEB_URL: "http://ssi-edge-beta:4005"
+          APP_SHUTDOWN_DELAY: "{{ app_shutdown_delay }}"
         ports:
           - "{{ edge_alpha_agent_port }}:{{ edge_alpha_agent_port }}"
           - "{{ edge_alpha_admin_port }}:{{ edge_alpha_admin_port }}"
@@ -67,6 +69,7 @@
           "ssi-cloud": "{{ ssi_cloud_ip }}"
           "ssi-edge-alpha": "{{ ssi_edge_alpha_ip }}"
           "ssi-edge-beta": "{{ ssi_edge_beta_ip }}"
+          "ssi-ground": "{{ ssi_ground_ip }}"
 
 - name: Deploy the edge beta admin app
   hosts: ssi_edge_beta
@@ -91,6 +94,7 @@
           AUTHORITY_WEB_URL: "http://ssi-cloud:3002"
           EDGE_ALPHA_WEB_URL: "http://ssi-edge-alpha:4002"
           EDGE_BETA_WEB_URL: "http://ssi-edge-beta:4005"
+          APP_SHUTDOWN_DELAY: "{{ app_shutdown_delay }}"
         ports:
           - "{{ edge_beta_agent_port }}:{{ edge_beta_agent_port }}"
           - "{{ edge_beta_admin_port }}:{{ edge_beta_admin_port }}"
@@ -102,6 +106,7 @@
           "ssi-cloud": "{{ ssi_cloud_ip }}"
           "ssi-edge-alpha": "{{ ssi_edge_alpha_ip }}"
           "ssi-edge-beta": "{{ ssi_edge_beta_ip }}"
+          "ssi-ground": "{{ ssi_ground_ip }}"
 
 ### Digital Twins ###
 
@@ -129,6 +134,8 @@
           AUTHORITY_WEB_URL: "http://ssi-cloud:3002"
           EDGE_ALPHA_WEB_URL: "http://ssi-edge-alpha:4002"
           EDGE_BETA_WEB_URL: "http://ssi-edge-beta:4005"
+          CAR_WEB_URL: "http://ssi-ground:6002"
+          TWIN_DRONE_WEB_URL: "http://ssi-edge-alpha:5005"
         ports:
           - "{{ car_twin_agent_port }}:{{ car_twin_agent_port }}"
           - "{{ car_twin_admin_port }}:{{ car_twin_admin_port }}"
@@ -138,6 +145,7 @@
           "ssi-cloud": "{{ ssi_cloud_ip }}"
           "ssi-edge-alpha": "{{ ssi_edge_alpha_ip }}"
           "ssi-edge-beta": "{{ ssi_edge_beta_ip }}"
+          "ssi-ground": "{{ ssi_ground_ip }}"
 
 - name: Deploy the drone twin app
   hosts: ssi_edge_alpha
@@ -163,6 +171,7 @@
           AUTHORITY_WEB_URL: "http://ssi-cloud:3002"
           EDGE_ALPHA_WEB_URL: "http://ssi-edge-alpha:4002"
           EDGE_BETA_WEB_URL: "http://ssi-edge-beta:4005"
+          CAR_WEB_URL: "http://ssi-ground:6002"
         ports:
           - "{{ drone_twin_agent_port }}:{{ drone_twin_agent_port }}"
           - "{{ drone_twin_admin_port }}:{{ drone_twin_admin_port }}"
@@ -172,3 +181,74 @@
           "ssi-cloud": "{{ ssi_cloud_ip }}"
           "ssi-edge-alpha": "{{ ssi_edge_alpha_ip }}"
           "ssi-edge-beta": "{{ ssi_edge_beta_ip }}"
+          "ssi-ground": "{{ ssi_ground_ip }}"
+
+### Car ###
+
+- name: Deploy the car app
+  hosts: ssi_ground
+  become: true
+  collections:
+    - community.docker
+
+  tasks:
+    - name: Start the car app
+      docker_container:
+        name: "{{ car_app_name }}"
+        image: "{{ base_app_image }}"
+        pull: true
+        state: started
+        env:
+          AGENT_HOST: "{{ inventory_hostname }}"
+          AGENT_PORT: "{{ car_agent_port }}"
+          AGENT_ADMIN_PORT: "{{ car_admin_port }}"
+          AGENT_LABEL: "{{ car_label }}"
+          AGENT_SEED: "{{ car_seed }}"
+          AGENT_INDY_NYM: "{{ car_nym }}"
+          AUTHORITY_WEB_URL: "http://ssi-cloud:3002"
+          WEB_PORT: "{{ car_web_port }}"
+        ports:
+          - "{{ car_agent_port }}:{{ car_agent_port }}"
+          - "{{ car_admin_port }}:{{ car_admin_port }}"
+          - "{{ car_web_port }}:{{ car_web_port }}"
+        command: uvicorn app.app_car.main:app --host 0.0.0.0 --port 6002
+        etc_hosts:
+          "ssi-cloud": "{{ ssi_cloud_ip }}"
+          "ssi-edge-alpha": "{{ ssi_edge_alpha_ip }}"
+          "ssi-edge-beta": "{{ ssi_edge_beta_ip }}"
+          "ssi-ground": "{{ ssi_ground_ip }}"
+
+### Drone ###
+
+- name: Deploy the drone app
+  hosts: ssi_ground
+  become: true
+  collections:
+    - community.docker
+
+  tasks:
+    - name: Start the drone app
+      docker_container:
+        name: "{{ drone_app_name }}"
+        image: "{{ base_app_image }}"
+        pull: true
+        state: started
+        env:
+          AGENT_HOST: "{{ inventory_hostname }}"
+          AGENT_PORT: "{{ drone_agent_port }}"
+          AGENT_ADMIN_PORT: "{{ drone_admin_port }}"
+          AGENT_LABEL: "{{ drone_label }}"
+          AGENT_SEED: "{{ drone_seed }}"
+          AGENT_INDY_NYM: "{{ drone_nym }}"
+          AUTHORITY_WEB_URL: "http://ssi-cloud:3002"
+          WEB_PORT: "{{ drone_web_port }}"
+        ports:
+          - "{{ drone_agent_port }}:{{ drone_agent_port }}"
+          - "{{ drone_admin_port }}:{{ drone_admin_port }}"
+          - "{{ drone_web_port }}:{{ drone_web_port }}"
+        command: uvicorn app.app_drone.main:app --host 0.0.0.0 --port 6005
+        etc_hosts:
+          "ssi-cloud": "{{ ssi_cloud_ip }}"
+          "ssi-edge-alpha": "{{ ssi_edge_alpha_ip }}"
+          "ssi-edge-beta": "{{ ssi_edge_beta_ip }}"
+          "ssi-ground": "{{ ssi_ground_ip }}"

@@ -7,7 +7,7 @@ uvicorn app.app_authorities.main:app --host 0.0.0.0 --port 3002
 ## alpha
 export AGENT_PORT=4000 AGENT_ADMIN_PORT=4001 \
     AGENT_LABEL=edge_alpha  \
-    AGENT_SEED="edgealpha00000000000000000000000" \
+    AGENT_SEED=edgealpha00000000000000000000000 \
     AGENT_INDY_NYM=LFrSJFNqGcfUZk11LCwbfJ && \
     uvicorn app.app_edge.main:app --host 0.0.0.0 --port 4002
 
@@ -22,8 +22,32 @@ export AGENT_PORT=4003 AGENT_ADMIN_PORT=4004 \
 
 ## car twin 
 export AGENT_PORT=5000 AGENT_ADMIN_PORT=5001 \
-    EDGE_NAME="edge_alpha" MIGRATION="false" \
+    EDGE_NAME=edge_alpha MIGRATION=false \
     AGENT_LABEL=digital_twin_car \
-    AGENT_SEED="cartwin0000000000000000000000000" \
+    AGENT_SEED=cartwin0000000000000000000000000 \
     AGENT_INDY_NYM=NFTSr3aVFrWkcXjh6jf3Ac && \
     uvicorn app.app_digital_twin_car.main:app --host 0.0.0.0 --port 5002
+
+## drone twin
+export AGENT_PORT=5003 AGENT_ADMIN_PORT=5004 \
+    EDGE_NAME=edge_alpha MIGRATION=false \
+    AGENT_LABEL=digital_twin_drone \
+    AGENT_SEED=dronetwin00000000000000000000000 \
+    AGENT_INDY_NYM=4ZRTENo4kDF2mHb2xXct25 && \
+    uvicorn app.app_digital_twin_drone.main:app --host 0.0.0.0 --port 5005
+
+# Car
+
+export AGENT_PORT=6000 AGENT_ADMIN_PORT=6001 \
+    AGENT_LABEL=car \
+    AGENT_SEED=car00000000000000000000000000000 \
+    AGENT_INDY_NYM=U8KbaDYhfHRRP5AAVnkXtY && \
+    uvicorn app.app_car.main:app --host 0.0.0.0 --port 6002
+
+# Drone
+
+export AGENT_PORT=6003 AGENT_ADMIN_PORT=6004 \
+    AGENT_LABEL=drone \
+    AGENT_SEED=drone000000000000000000000000000 \
+    AGENT_INDY_NYM=GV9zZYxygF5z9AvaDF8vdv && \
+    uvicorn app.app_drone.main:app --host 0.0.0.0 --port 6005

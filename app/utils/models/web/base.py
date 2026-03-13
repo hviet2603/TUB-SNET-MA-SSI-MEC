@@ -4,6 +4,8 @@ from .vc import VCIssuanceInitRequestModel, VPExchangeInitRequestModel
 from .application import (
     AppMigrationInitRequestModel,
 )
+from .capability_delegation import CapabilityDelegationRequestModel
+from .car_position import CarPositionRequestModel
 from acapy_controller import Controller
 from typing import Dict, Any, List
 from ..ssi.agent import AgentConfig
@@ -12,6 +14,8 @@ SSIRequestModel = (
     VCIssuanceInitRequestModel
     | VPExchangeInitRequestModel
     | AppMigrationInitRequestModel
+    | CapabilityDelegationRequestModel
+    | CarPositionRequestModel
 )
 
 class SSIRequestWithContext(BaseModel):

@@ -3,8 +3,12 @@ ansible_python_interpreter: /usr/bin/python3.8
 ssi_cloud_ip: 192.168.0.2
 ssi_edge_alpha_ip: 192.168.0.3
 ssi_edge_beta_ip: 192.168.0.4
+ssi_ground_ip: 192.168.0.5
 
 base_app_image: "vdocker2603/ma-ssi-apps:latest"
+
+#app_shutdown_delay: "90"
+app_shutdown_delay: "0"
 
 # App names
 

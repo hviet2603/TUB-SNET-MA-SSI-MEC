@@ -1,6 +1,6 @@
 # Build
 
-docker build -t vdocker2603/ma-ssi-apps:latest -f infra/deployment/dockerfiles/apps.dockerfile .
+docker build -t vdocker2603/ma-ssi-apps:latest -f dockerfiles/apps.dockerfile .
 
 # Run
 

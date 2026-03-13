@@ -31,10 +31,4 @@
       loop: "{{ container_list }}"
       ignore_errors: yes
       failed_when: false
-    
-    - name: Prune unused images
-      docker_prune:
-        images: true
-        images_filters:
-          dangling: false
 

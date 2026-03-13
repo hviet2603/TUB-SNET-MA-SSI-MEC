@@ -1,6 +1,8 @@
 from acapy_controller import Controller
 from acapy_controller.protocols import InvitationMessage
 import httpx
+import time
+import os
 
 from app.utils.models.web.vc import VC_TYPE
 from app.utils.web.vc import create_vp_definition
@@ -11,6 +13,7 @@ from ..env_config import (
     AUTHORITY_WEB_URL,
 )
 from app.utils.agent import create_agent_admin_url
+from app.utils.logger import get_logger
 from app.utils.ssi.protocols.didexchange import (
     didexchange_inviter_create_invitation,
     didexchange_inviter_handle_request,
@@ -36,6 +39,7 @@ from app.utils.models.web.application import (
 
 import docker
 
+metrics_logger = get_logger()
 
 async def _send_app_migration_request(
     base_url: str,
@@ -85,9 +89,13 @@ async def request_application_migration(
         )
 
         # Handle DID exchange
+        did_exchange_start = time.perf_counter()
         conn = await didexchange_inviter_handle_request(agent, invite)
+        did_exchange_end = time.perf_counter()
+        metrics_logger.info(f"[App Migration] DID exchange completed in {did_exchange_end - did_exchange_start} seconds")
 
         # Send proof
+        vc_exchange_start = time.perf_counter()
         pres_ex = await jsonld_present_proof_prover_send_proof(
             agent, conn.connection_id
         )
@@ -111,6 +119,8 @@ async def request_application_migration(
         pres_ex = await jsonld_present_proof_verifier_verify_presentation(
             agent, pres_ex.pres_ex_id
         )
+        vc_exchange_end = time.perf_counter()
+        metrics_logger.info(f"[App Migration] VC exchange completed in {vc_exchange_end - vc_exchange_start} seconds")
 
         # Do actual authorization work here
         if credential == None:
@@ -203,6 +213,11 @@ async def schedule_app_shutdown_on_new_verkey_registration(
         # Shut down the old app
 
         print(f"Prepare to remove app {app_name}")
+
+        delay = int(os.getenv("APP_SHUTDOWN_DELAY", 0))
+        if delay > 0:
+            print(f"Waiting for {delay} seconds before shutting down the old app...")
+            await asyncio.sleep(delay)
 
         docker_client = docker.from_env()
         container = docker_client.containers.get(app_name)

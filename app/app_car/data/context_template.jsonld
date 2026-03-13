@@ -1,0 +1,26 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "@protected": true,
+
+    "name": "http://schema.org/name",
+    "description": "http://schema.org/description",
+    "identifier": "http://schema.org/identifier",
+    "image": {"@id": "http://schema.org/image", "@type": "@id"},
+
+    "CarCapabilityDelegation": {
+      "@id": "ENDPOINT_BASE_URL/vc/vc_context#CarCapabilityDelegation",
+      "@context": {
+        "car_twin_id": "https://example.com/terms#car_twin_id",
+        "car_id": "https://example.com/terms#car_id",
+        "capability_delegation": {
+          "@id": "https://example.com/terms#capability_delegation",
+          "@context": {
+            "position": "https://example.com/terms#position_authority"
+          }
+        }
+      }
+    }
+
+  }
+}

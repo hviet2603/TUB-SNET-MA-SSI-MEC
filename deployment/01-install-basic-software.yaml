@@ -13,10 +13,10 @@
         state: present
         update_cache: yes
 
-- hosts: all
-  become_user: user
-  roles:
-    - install-nodejs
+#- hosts: all
+#  become_user: user
+#  roles:
+#    - install-nodejs
 
 - hosts: all
   become: true

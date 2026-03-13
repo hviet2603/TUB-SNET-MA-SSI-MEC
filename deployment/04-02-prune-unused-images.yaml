@@ -1,0 +1,14 @@
+- name: Prune unused images
+  hosts: all
+  gather_facts: no
+  collections:
+    - community.docker
+
+  tasks:
+    
+    - name: Prune unused images
+      docker_prune:
+        images: true
+        images_filters:
+          dangling: false
+

@@ -1,5 +1,6 @@
 import httpx
 import asyncio
+import time
 
 from app.utils.agent import create_agent_admin_url
 from app.utils.models.web.vc import VCIssuanceInitRequestModel
@@ -19,6 +20,9 @@ from app.utils.ssi.protocols.jsonld_issue_credential import (
 from acapy_controller import Controller
 from acapy_controller.protocols import InvitationMessage
 
+from app.utils.logger import get_logger
+
+metric_logger = get_logger()
 
 async def _send_request_vc_init_request(base_url: str, invite: InvitationMessage):
     client = httpx.AsyncClient(base_url=base_url)
@@ -51,10 +55,14 @@ async def request_vc() -> bool:
             _send_request_vc_init_request(AUTHORITY_WEB_URL, invite)
         )
 
+        did_exchange_start = time.perf_counter()
         # Handle DID exchange
         conn = await didexchange_inviter_handle_request(holder, invite)
+        did_exchange_end = time.perf_counter()
+        metric_logger.info(f"[Request VC] DID exchange completed in {did_exchange_end - did_exchange_start} seconds")
 
         # Process the received credential
+        vc_exchange_start = time.perf_counter()
         cred_ex = await jsonld_issue_credential_holder_wait_for_offer(
             holder, conn.connection_id
         )
@@ -64,6 +72,8 @@ async def request_vc() -> bool:
         cred_ex = await jsonld_issue_credential_holder_receive_credential(
             holder, cred_ex.cred_ex_id
         )
+        vc_exchange_end = time.perf_counter()
+        metric_logger.info(f"[Request VC] VC exchange completed in {vc_exchange_end - vc_exchange_start} seconds")
 
         request_vc_res = await task
 

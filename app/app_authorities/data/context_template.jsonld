@@ -31,6 +31,24 @@
         "drone_twin_id": "https://example.com/terms#drone_twin_id",
         "drone_id": "https://example.com/terms#drone_id"
       }
+    },
+
+    "Car": {
+      "@id": "ENDPOINT_BASE_URL/vc/vc_context#Car",
+      "@context": {
+        "name": "http://schema.org/name",
+        "car_twin_id": "https://example.com/terms#car_twin_id",
+        "car_id": "https://example.com/terms#car_id"
+      }
+    },
+
+    "Drone": {
+      "@id": "ENDPOINT_BASE_URL/vc/vc_context#Drone",
+      "@context": {
+        "name": "http://schema.org/name",
+        "drone_twin_id": "https://example.com/terms#drone_twin_id",
+        "drone_id": "https://example.com/terms#drone_id"
+      }
     }
 
   }

@@ -2,17 +2,24 @@ cloud_node_name: "ssi-cloud"
 edge_node_names:
   - "ssi-edge-alpha"
   - "ssi-edge-beta"
+ground_node_name: "ssi-ground"
+
 cloud_node_ip: "192.168.0.2"
 cloud_node_netmask: "255.255.255.0"
 edge_node_ips:
   - "192.168.0.3"
   - "192.168.0.4"
 edge_node_netmask: "255.255.255.0"
+ground_node_ip: "192.168.0.5"
+ground_node_netmask: "255.255.255.0"
+
 cloud_node_cpus: 2
 edge_node_cpus: 2
+ground_node_cpus: 2
 cloud_node_ram: 2048
 edge_node_ram: 2048
+ground_node_ram: 2048
 
-# You should change those
-host_adapter: "enp4s0"
+# Those should be configured
+host_adapter: "wlo1"
 host_ssh_pubkey: "~/.ssh/id_rsa.pub"

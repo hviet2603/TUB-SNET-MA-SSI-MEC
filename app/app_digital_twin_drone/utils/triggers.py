@@ -1,6 +1,7 @@
 from acapy_controller import Controller
 from acapy_controller.protocols import InvitationMessage
 import httpx
+import time
 
 from app.utils.models.web.vc import VC_TYPE
 from app.utils.ssi.protocols.basicmessage import basicmessage_receive_message, basicmessage_send_message
@@ -26,6 +27,9 @@ from app.utils.models.web.application import (
     AppMigrationNewAppInfo,
 )
 
+from app.utils.logger import get_logger
+
+metric_logger = get_logger()
 
 async def _send_app_migration_request(
     base_url: str,
@@ -66,9 +70,13 @@ async def trigger_application_migration(
         )
 
         # Handle DID exchange
+        did_exchange_start = time.perf_counter()
         conn = await didexchange_inviter_handle_request(agent, invite)
+        did_exchange_end = time.perf_counter()
+        metric_logger.info(f"[App Migration] DID exchange completed in {did_exchange_end - did_exchange_start} seconds")
 
         # Handle VP exchange
+        vc_exchange_start = time.perf_counter()
         pres_ex = await jsonld_present_proof_prover_send_proof(
             agent, conn.connection_id
         )
@@ -94,6 +102,8 @@ async def trigger_application_migration(
         pres_ex = await jsonld_present_proof_verifier_verify_presentation(
             agent, pres_ex.pres_ex_id
         )
+        vc_exchange_end = time.perf_counter()
+        metric_logger.info(f"[App Migration] VC exchange completed in {vc_exchange_end - vc_exchange_start} seconds")
 
         # Do actual authorization work here
         if credential == None:

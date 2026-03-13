@@ -9,3 +9,5 @@ dev_cp_src_to_hosts.sh
 **/.vagrant/
 
 **/node_modules/
+
+**/*.log

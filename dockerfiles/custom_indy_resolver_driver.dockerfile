@@ -1,4 +1,4 @@
-# Modify from "https://github.com/decentralized-identity/uni-resolver-driver-did-indy/blob/main/docker/Dockerfile"
+# Modified from "https://github.com/decentralized-identity/uni-resolver-driver-did-indy/blob/main/docker/Dockerfile"
 
 # Dockerfile for universalresolver/driver-did-indy
 

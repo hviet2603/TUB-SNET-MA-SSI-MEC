@@ -8,6 +8,8 @@ AUTHORITY_WEB_URL = os.getenv("AUTHORITY_WEB_URL", "http://localhost:3002")
 EDGE_ALPHA_WEB_URL = os.getenv("EDGE_ALPHA_WEB_URL", "http://localhost:4002")
 EDGE_BETA_WEB_URL = os.getenv("EDGE_BETA_WEB_URL", "http://localhost:4005")
 EDGE_NAME = os.getenv("EDGE_NAME", "edge_alpha")
+CAR_WEB_URL = os.getenv("CAR_WEB_URL", "http://localhost:6002")
+TWIN_DRONE_WEB_URL = os.getenv("TWIN_DRONE_WEB_URL", "http://localhost:5005")
 
 def get_agent_config() -> AgentConfig:
     

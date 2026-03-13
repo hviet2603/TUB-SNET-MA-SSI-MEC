@@ -4,7 +4,6 @@ import time
 
 from app.utils.agent import create_agent_admin_url
 from app.utils.models.web.vc import VCIssuanceInitRequestModel
-from app.utils.ssi.protocols.basicmessage import basicmessage_receive_message, basicmessage_send_message
 from ..env_config import AUTHORITY_WEB_URL, get_agent_config
 from app.utils.ssi.protocols.didexchange import (
     didexchange_inviter_create_invitation,

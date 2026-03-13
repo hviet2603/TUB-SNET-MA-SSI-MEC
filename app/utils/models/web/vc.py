@@ -15,11 +15,11 @@ class VPExchangeInitRequestModel(BaseModel):
 
 class VC_TYPE(str, Enum):
     EDGE = "Edge"
-    EDGE_OPERATOR = "EdgeOperator"
     CAR_TWIN = "CarTwin"
     DRONE_TWIN = "DroneTwin"
     CAR = "Car"
     DRONE = "Drone"
+    CAR_CAPABILITY_DELEGATION = "CarCapabilityDelegation"
 
 
 VP_DEF_DETAILS_TEMPLATE = {
@@ -76,6 +76,58 @@ VP_DEF_DETAILS_TEMPLATE = {
             ]
         },
     },
-    VC_TYPE.CAR: {},
-    VC_TYPE.DRONE: {},
+    VC_TYPE.CAR: {
+        "constraints": {
+            "fields": [
+                {
+                    "path": ["$.credentialSubject.name"],
+                    "purpose": "To show the name of the car",
+                },
+                {
+                    "path": ["$.credentialSubject.car_twin_id"],
+                    "purpose": "To show the ID of the car twin",
+                },
+                {
+                    "path": ["$.credentialSubject.car_id"],
+                    "purpose": "To show the ID of the car associated with the twin",
+                },
+            ]
+        },
+    },
+    VC_TYPE.DRONE: {
+        "constraints": {
+            "fields": [
+                {
+                    "path": ["$.credentialSubject.name"],
+                    "purpose": "To show the name of the drone",
+                },
+                {
+                    "path": ["$.credentialSubject.drone_twin_id"],
+                    "purpose": "To show the ID of the drone twin",
+                },
+                {
+                    "path": ["$.credentialSubject.drone_id"],
+                    "purpose": "To show the ID of the drone associated with the twin",
+                },
+            ]
+        },
+    },
+    VC_TYPE.CAR_CAPABILITY_DELEGATION: {
+        "constraints": {
+            "fields": [
+                {
+                    "path": ["$.credentialSubject.car_twin_id"],
+                    "purpose": "To show the ID of the car twin",
+                },
+                {
+                    "path": ["$.credentialSubject.car_id"],
+                    "purpose": "To show the ID of the car associated with the twin",
+                },
+                {
+                    "path": ["$.credentialSubject.capability_delegation"],
+                    "purpose": "To show the delegated capabilities for the car's twin",
+                },
+            ]
+        }
+    }
 }

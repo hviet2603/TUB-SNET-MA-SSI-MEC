@@ -10,3 +10,6 @@ ssi-edge-alpha ansible_user=user
 
 [ssi_edge_beta]
 ssi-edge-beta ansible_user=user
+
+[ssi_ground]
+ssi-ground ansible_user=user

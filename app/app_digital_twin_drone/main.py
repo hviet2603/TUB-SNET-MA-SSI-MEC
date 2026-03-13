@@ -6,6 +6,7 @@ from app.utils.agent import create_agent
 from .env_config import get_agent_config
 from .routes.triggers.triggers import router as triggers_router
 from .routes.apps.apps import router as apps_router
+from .routes.car.car import router as car_router
 import os
 import asyncio
 
@@ -35,6 +36,7 @@ app = FastAPI(lifespan=lifespan)
 
 app.include_router(triggers_router)
 app.include_router(apps_router)
+app.include_router(car_router)
 
 @app.get("/")
 def read_root():

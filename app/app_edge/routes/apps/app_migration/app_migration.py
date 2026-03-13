@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
+import time
 
 from app.app_edge.utils.application import (
     get_new_app_verkey,
@@ -18,9 +19,12 @@ from app.utils.models.web.application import (
 )
 from app.utils.models.web.base import SSIRequestWithContext
 from app.utils.ssi.protocols.didexchange import didexchange_clear_connection
+from app.utils.logger import get_logger
 import docker
 
 router = APIRouter(prefix="/app_migration", tags=["app_migration"])
+
+metrics_logger = get_logger()
 
 """ Initiate the app migration process, must be called from either source edge or from digital twin apps """
 
@@ -54,6 +58,8 @@ async def app_migration(
         if req.connection_type == ApplicationConnectionType.EDGE_TO_EDGE:
 
             # Role: Destination Edge
+
+            app_deployment_start = time.perf_counter()
 
             app_host = agent_config.host
 
@@ -121,12 +127,17 @@ async def app_migration(
                 app_name=app_manifest.name, new_verkey=new_verkey
             )
 
+            app_deployment_end = time.perf_counter()
+            metrics_logger.info(f"[App Migration] App deployment completed in {app_deployment_end - app_deployment_start} seconds")
+
         elif (
             req.connection_type == ApplicationConnectionType.TWIN_CAR_TO_EDGE
             or req.connection_type == ApplicationConnectionType.TWIN_DRONE_TO_EDGE
         ):
 
             # Role: Source Edge
+
+            handover_start = time.perf_counter()
 
             # Step 1: Send request to the other edge
 
@@ -144,6 +155,9 @@ async def app_migration(
                 app_did=app_did,
                 new_verkey=new_app_info.new_verkey,
             )
+
+            handover_end = time.perf_counter()
+            metrics_logger.info(f"[App Migration] App handover request completed in {handover_end - handover_start} seconds")
 
         # Send the new app info to the requester
         if new_app_info == None:
